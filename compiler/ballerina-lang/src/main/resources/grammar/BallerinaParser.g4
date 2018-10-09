@@ -615,7 +615,7 @@ onabortStatement
     ;
 
 compensationTransactionStatement
-    :   COMPENSATION ASSIGN QuotedStringLiteral
+    :   COMPENSATION ID ASSIGN QuotedStringLiteral
     ;
 
 namespaceDeclarationStatement
