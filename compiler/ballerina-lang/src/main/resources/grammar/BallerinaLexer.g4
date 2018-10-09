@@ -136,6 +136,7 @@ DONE        : 'done' ;
 SCOPE       : 'scope';
 COMPENSATION: 'compensation';
 COMPENSATE  : 'compensate' ;
+ONCOMPENSATE: 'oncompensate';
 PRIMARYKEY  : 'primarykey' ;
 
 // Separators

@@ -62,16 +62,19 @@ resourceParameterList
     ;
 
 callableUnitBody
-    :   LEFT_BRACE endpointDeclaration* (statement* | workerDeclaration+) RIGHT_BRACE
+    :   LEFT_BRACE endpointDeclaration* (statement* compensationActionClause? | workerDeclaration+) RIGHT_BRACE
     ;
 
+compensationActionClause
+    :   ONCOMPENSATE LEFT_BRACE statement+ RIGHT_BRACE
+    ;
 
 functionDefinition
     :   (PUBLIC)? (EXTERN)? FUNCTION ((Identifier | typeName) DOUBLE_COLON)? callableUnitSignature (callableUnitBody | SEMICOLON)
     ;
 
 lambdaFunction
-    :  FUNCTION LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS (RETURNS lambdaReturnParameter)? callableUnitBody
+    :   FUNCTION LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS (RETURNS lambdaReturnParameter)? callableUnitBody
     ;
 
 arrowFunction
@@ -450,7 +453,7 @@ compensationClause
     ;
 
 compensateStatement
-    :   COMPENSATE Identifier SEMICOLON
+    :   COMPENSATE (Identifier | QuotedStringLiteral)? SEMICOLON
     ;
 
 // typeName is only message
@@ -577,6 +580,7 @@ transactionPropertyInitStatement
     :   retriesStatement
     |   oncommitStatement
     |   onabortStatement
+    |   compensationTransactionStatement
     ;
 
 transactionPropertyInitStatementList
@@ -608,6 +612,10 @@ oncommitStatement
 
 onabortStatement
     :   ONABORT ASSIGN expression
+    ;
+
+compensationTransactionStatement
+    :   COMPENSATION ASSIGN QuotedStringLiteral
     ;
 
 namespaceDeclarationStatement
