@@ -573,14 +573,14 @@ transactionStatement
     ;
 
 transactionClause
-    :   TRANSACTION (WITH transactionPropertyInitStatementList)? LEFT_BRACE statement* RIGHT_BRACE
+    :   TRANSACTION COMPENSATION? (WITH transactionPropertyInitStatementList)? LEFT_BRACE statement* RIGHT_BRACE
     ;
 
 transactionPropertyInitStatement
     :   retriesStatement
     |   oncommitStatement
     |   onabortStatement
-    |   compensationTransactionStatement
+    |   compensationIdStatement
     ;
 
 transactionPropertyInitStatementList
@@ -614,8 +614,8 @@ onabortStatement
     :   ONABORT ASSIGN expression
     ;
 
-compensationTransactionStatement
-    :   COMPENSATION ID ASSIGN QuotedStringLiteral
+compensationIdStatement
+    :   COMPENS_ID ASSIGN QuotedStringLiteral
     ;
 
 namespaceDeclarationStatement

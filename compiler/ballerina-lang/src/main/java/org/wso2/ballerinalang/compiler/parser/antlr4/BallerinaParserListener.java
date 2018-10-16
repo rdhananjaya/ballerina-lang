@@ -1,4 +1,4 @@
-// Generated from BallerinaParser.g4 by ANTLR 4.5.3
+// Generated from /Users/dhananjaya/Work/BalarinaLang/compiler/ballerina-lang/src/main/resources/grammar/BallerinaParser.g4 by ANTLR 4.5.3
 package org.wso2.ballerinalang.compiler.parser.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -127,6 +127,16 @@ public interface BallerinaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCallableUnitBody(BallerinaParser.CallableUnitBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BallerinaParser#compensationActionClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompensationActionClause(BallerinaParser.CompensationActionClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BallerinaParser#compensationActionClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompensationActionClause(BallerinaParser.CompensationActionClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BallerinaParser#functionDefinition}.
 	 * @param ctx the parse tree
@@ -1423,6 +1433,16 @@ public interface BallerinaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOnabortStatement(BallerinaParser.OnabortStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BallerinaParser#compensationIdStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompensationIdStatement(BallerinaParser.CompensationIdStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BallerinaParser#compensationIdStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompensationIdStatement(BallerinaParser.CompensationIdStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BallerinaParser#namespaceDeclarationStatement}.
 	 * @param ctx the parse tree

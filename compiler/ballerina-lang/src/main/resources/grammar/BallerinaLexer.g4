@@ -8,6 +8,7 @@ lexer grammar BallerinaLexer;
     boolean inSiddhiInsertQuery = false;
     boolean inSiddhiTimeScaleQuery = false;
     boolean inSiddhiOutputRateLimit = false;
+    boolean inCompensationTransaction = false;
 }
 
 // Reserved words
@@ -134,9 +135,9 @@ BUT         : 'but' ;
 CHECK       : 'check' ;
 DONE        : 'done' ;
 SCOPE       : 'scope';
-COMPENSATION: 'compensation';
+COMPENSATION: 'compensation'  { inCompensationTransaction = true; } ;
+COMPENS_ID  : { inCompensationTransaction = true }? 'id' { inCompensationTransaction = false; } ;
 COMPENSATE  : 'compensate' ;
-ID          : 'id';
 ONCOMPENSATE: 'oncompensate';
 PRIMARYKEY  : 'primarykey' ;
 
