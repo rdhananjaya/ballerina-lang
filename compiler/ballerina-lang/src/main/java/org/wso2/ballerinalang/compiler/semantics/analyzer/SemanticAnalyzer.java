@@ -1492,11 +1492,11 @@ public class SemanticAnalyzer extends BLangNodeVisitor {
 
     @Override
     public void visit(BLangCompensate node) {
-        if (symTable.notFoundSymbol.equals(symResolver.lookupSymbol(env, names.fromString(node
-                .getScopeName()
-                .getValue()), SymTag.SCOPE))) {
-            dlog.error(node.pos, DiagnosticCode.UNDEFINED_SYMBOL, node.getScopeName().getValue());
-        }
+//        if (symTable.notFoundSymbol.equals(symResolver.lookupSymbol(env, names.fromString(node
+//                .getName()
+//                .getValue()), SymTag.SCOPE))) {
+//            dlog.error(node.pos, DiagnosticCode.UNDEFINED_SYMBOL, node.getName().getValue());
+//        }
     }
 
     // Private methods

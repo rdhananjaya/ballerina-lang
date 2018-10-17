@@ -128,15 +128,15 @@ public interface BallerinaParserListener extends ParseTreeListener {
 	 */
 	void exitCallableUnitBody(BallerinaParser.CallableUnitBodyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BallerinaParser#compensationActionClause}.
+	 * Enter a parse tree produced by {@link BallerinaParser#onCompensateClause}.
 	 * @param ctx the parse tree
 	 */
-	void enterCompensationActionClause(BallerinaParser.CompensationActionClauseContext ctx);
+	void enterOnCompensateClause(BallerinaParser.OnCompensateClauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BallerinaParser#compensationActionClause}.
+	 * Exit a parse tree produced by {@link BallerinaParser#onCompensateClause}.
 	 * @param ctx the parse tree
 	 */
-	void exitCompensationActionClause(BallerinaParser.CompensationActionClauseContext ctx);
+	void exitOnCompensateClause(BallerinaParser.OnCompensateClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BallerinaParser#functionDefinition}.
 	 * @param ctx the parse tree

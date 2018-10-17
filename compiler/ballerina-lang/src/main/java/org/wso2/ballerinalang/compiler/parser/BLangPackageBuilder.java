@@ -73,6 +73,7 @@ import org.ballerinalang.model.tree.statements.BlockNode;
 import org.ballerinalang.model.tree.statements.ForeverNode;
 import org.ballerinalang.model.tree.statements.ForkJoinNode;
 import org.ballerinalang.model.tree.statements.IfNode;
+import org.ballerinalang.model.tree.statements.OnCompensateNode;
 import org.ballerinalang.model.tree.statements.ScopeNode;
 import org.ballerinalang.model.tree.statements.StatementNode;
 import org.ballerinalang.model.tree.statements.StreamingQueryStatementNode;
@@ -174,6 +175,7 @@ import org.wso2.ballerinalang.compiler.tree.statements.BLangIf;
 import org.wso2.ballerinalang.compiler.tree.statements.BLangLock;
 import org.wso2.ballerinalang.compiler.tree.statements.BLangMatch;
 import org.wso2.ballerinalang.compiler.tree.statements.BLangMatch.BLangMatchStmtPatternClause;
+import org.wso2.ballerinalang.compiler.tree.statements.BLangOnCompensateStmt;
 import org.wso2.ballerinalang.compiler.tree.statements.BLangPostIncrement;
 import org.wso2.ballerinalang.compiler.tree.statements.BLangRetry;
 import org.wso2.ballerinalang.compiler.tree.statements.BLangReturn;
@@ -352,6 +354,8 @@ public class BLangPackageBuilder {
     private Stack<Set<Whitespace>> objectFieldBlockWs = new Stack<>();
 
     private Stack<ScopeNode> scopeNodeStack = new Stack<>();
+
+    private Stack<OnCompensateNode> onCompensateNodeStack = new Stack<>();
 
     private BLangAnonymousModelHelper anonymousModelHelper;
     private CompilerOptions compilerOptions;
@@ -2105,11 +2109,13 @@ public class BLangPackageBuilder {
         transactionNode.setOnRetryBody(onretryBlock);
     }
 
-    void endTransactionStmt(DiagnosticPos pos, Set<Whitespace> ws) {
+    void endTransactionStmt(DiagnosticPos pos, Set<Whitespace> ws, boolean isCompensatingTransaction) {
         BLangTransaction transaction = (BLangTransaction) transactionNodeStack.pop();
         transaction.pos = pos;
         transaction.addWS(ws);
         addStmtToCurrentBlock(transaction);
+
+        transaction.kind = isCompensatingTransaction ? TransactionNode.Kind.COMPENSATION : TransactionNode.Kind.ACID;
 
         // TODO This is a temporary workaround to flag coordinator service start
         String value = compilerOptions.get(CompilerOptionName.TRANSACTION_EXISTS);
@@ -3361,7 +3367,7 @@ public class BLangPackageBuilder {
         BLangCompensate compensateNode = (BLangCompensate) TreeBuilder.createCompensateNode();
         compensateNode.pos = pos;
         compensateNode.addWS(ws);
-        compensateNode.scopeName = createIdentifier(name);
+        compensateNode.name = createIdentifier(name);
         compensateNode.invocation.name = (BLangIdentifier) createIdentifier(name);
         compensateNode.invocation.pkgAlias = (BLangIdentifier) createIdentifier(null);
 
@@ -3392,7 +3398,31 @@ public class BLangPackageBuilder {
         scopeNode.setScopeBody(scopeBlock);
     }
 
-    void startOnCompensationBlock() {
-        startFunctionDef();
+    void startOnCompensationBlock(PackageID pkgID) {
+        this.startLambdaFunctionDef(pkgID);
+        this.startBlock();
+    }
+
+    void endOnCompensateBlock(DiagnosticPos currentPos, Set<Whitespace> ws) {
+        endCallableUnitBody(ws);
+//        this.varListStack.push(new ArrayList<>());
+//        this.varListStack.peek().add(this.varStack.pop());
+//        this.commaWsStack.push(ws);
+        this.addLambdaFunctionDef(currentPos, ws, false, false, false);
+        BLangLambdaFunction lambdaFunc = (BLangLambdaFunction) this.exprNodeStack.pop();
+
+        // mark container function as compensable.
+        BLangFunction parentFunction = (BLangFunction) invokableNodeStack.peek();
+        parentFunction.compensablelFunction = true;
+
+        BLangOnCompensateStmt onCompensateStmt = (BLangOnCompensateStmt) TreeBuilder.createOnCompensateStmt();
+        onCompensateStmt.onCompensateFunc = lambdaFunc;
+        addStmtToCurrentBlock(onCompensateStmt);
+    }
+
+    void addTransactionId(Set<Whitespace> ws, String transactionId) {
+        BLangTransaction transaction = (BLangTransaction) transactionNodeStack.peek();
+        transaction.addWS(ws);
+        transaction.transactionId = transactionId;
     }
 }

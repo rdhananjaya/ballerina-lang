@@ -45,6 +45,8 @@ public class BLangFunction extends BLangInvokableNode implements FunctionNode {
 
     public boolean interfaceFunction;
 
+    public boolean compensablelFunction = false;
+
     public Set<BVarSymbol> closureVarSymbols =  new LinkedHashSet<>();
 
     public Map<BSymbol, BLangStatement> initFunctionStmts = new LinkedHashMap<>();
@@ -75,5 +77,4 @@ public class BLangFunction extends BLangInvokableNode implements FunctionNode {
     public String toString() {
         return "BLangFunction: " + super.toString();
     }
-    
 }

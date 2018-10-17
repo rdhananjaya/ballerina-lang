@@ -1381,10 +1381,10 @@ public class CodeGenerator extends BLangNodeVisitor {
     public void visit(BLangCompensate compensate) {
         Operand jumpAddr = getOperand(nextIP());
         // Add child function refs.
-        Stack children = childScopesMap.get(compensate.scopeName.getValue());
+        Stack children = childScopesMap.get(compensate.name.getValue());
 
         int i = 0;
-        // Operands: scopeName, child count, children, NIL return.
+        // Operands: name, child count, children, NIL return.
         Operand[] operands = new Operand[3 + children.size()];
 
         int scopeNameCPIndex = addUTF8CPEntry(currentPkgInfo, compensate.invocation.name.value);

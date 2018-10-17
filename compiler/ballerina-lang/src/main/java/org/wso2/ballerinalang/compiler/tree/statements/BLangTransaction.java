@@ -33,6 +33,8 @@ public class BLangTransaction extends BLangStatement implements TransactionNode 
     public BLangExpression retryCount;
     public BLangExpression onCommitFunction;
     public BLangExpression onAbortFunction;
+    public String transactionId;
+    public Kind kind;
 
     public BLangTransaction() {
     }
@@ -111,7 +113,10 @@ public class BLangTransaction extends BLangStatement implements TransactionNode 
 
     @Override
     public String toString() {
-        return "Transaction: {" + transactionBody + "} "
+        return "Transaction"
+                + (kind == Kind.COMPENSATION ? " [compensation" : "")
+                + (transactionId == null || transactionId.isEmpty() ? "" : " " + transactionId + "]")
+                + ": {" + transactionBody + "} "
                 + (onRetryBody != null ? " failed {" + String.valueOf(onRetryBody) + "}" : "")
                 + (retryCount != null ? " retry (" + retryCount + ")" : "")
                 + (onCommitFunction != null ? " committed (" + onCommitFunction + ")" : "")

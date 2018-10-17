@@ -23,7 +23,7 @@ import org.ballerinalang.model.tree.IdentifierNode;
  * @since 0.980.0
  */
 public interface CompensateNode extends StatementNode {
-    public IdentifierNode getScopeName();
+    public IdentifierNode getName();
 
-    public void setScopeName(IdentifierNode scopeName);
+    public void setName(IdentifierNode name);
 }

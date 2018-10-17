@@ -62,10 +62,10 @@ resourceParameterList
     ;
 
 callableUnitBody
-    :   LEFT_BRACE endpointDeclaration* (statement* compensationActionClause? | workerDeclaration+) RIGHT_BRACE
+    :   LEFT_BRACE endpointDeclaration* (statement* onCompensateClause? | workerDeclaration+) RIGHT_BRACE
     ;
 
-compensationActionClause
+onCompensateClause
     :   ONCOMPENSATE LEFT_BRACE statement+ RIGHT_BRACE
     ;
 
@@ -453,7 +453,7 @@ compensationClause
     ;
 
 compensateStatement
-    :   COMPENSATE (Identifier | QuotedStringLiteral)? SEMICOLON
+    :   COMPENSATE (Identifier | QuotedStringLiteral)? SEMICOLON // todo: remove Identifier when removing *scope* based compensation from this rule
     ;
 
 // typeName is only message

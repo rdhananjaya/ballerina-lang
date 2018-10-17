@@ -160,13 +160,13 @@ public class BallerinaParserBaseListener implements BallerinaParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCompensationActionClause(BallerinaParser.CompensationActionClauseContext ctx) { }
+	@Override public void enterOnCompensateClause(BallerinaParser.OnCompensateClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCompensationActionClause(BallerinaParser.CompensationActionClauseContext ctx) { }
+	@Override public void exitOnCompensateClause(BallerinaParser.OnCompensateClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

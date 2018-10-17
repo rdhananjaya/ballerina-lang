@@ -125,6 +125,7 @@ public enum NodeKind {
     STREAM,
     SCOPE,
     COMPENSATE,
+    ON_COMPENSATE_BLOCK,
     CHANNEL_RECEIVE,
     CHANNEL_SEND,
 

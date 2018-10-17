@@ -29,7 +29,7 @@ import org.wso2.ballerinalang.compiler.tree.expressions.BLangInvocation;
  */
 public class BLangCompensate extends BLangStatement implements CompensateNode {
 
-    public IdentifierNode scopeName;
+    public IdentifierNode name;
 
     public BLangInvocation invocation;
 
@@ -37,17 +37,17 @@ public class BLangCompensate extends BLangStatement implements CompensateNode {
         invocation = (BLangInvocation) TreeBuilder.createInvocationNode();
     }
 
-    public BLangCompensate(IdentifierNode scopeName) {
+    public BLangCompensate(IdentifierNode name) {
         invocation = (BLangInvocation) TreeBuilder.createInvocationNode();
-        this.scopeName = scopeName;
+        this.name = name;
     }
 
-    public IdentifierNode getScopeName() {
-        return scopeName;
+    public IdentifierNode getName() {
+        return name;
     }
 
-    public void setScopeName(IdentifierNode scopeName) {
-        this.scopeName = scopeName;
+    public void setName(IdentifierNode name) {
+        this.name = name;
     }
 
     @Override

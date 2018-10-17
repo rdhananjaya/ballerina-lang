@@ -45,4 +45,12 @@ public interface TransactionNode extends StatementNode {
 
     void setOnAbortFunction(ExpressionNode onAbortFunction);
 
+    /**
+     * Indicate transaction type, ACID or COMPENSATION.
+     *
+     * @since 0.983.0
+     */
+    enum Kind {
+        ACID, COMPENSATION
+    }
 }

@@ -74,7 +74,7 @@ public class BallerinaParser extends Parser {
 		RULE_compilationUnit = 0, RULE_packageName = 1, RULE_version = 2, RULE_importDeclaration = 3, 
 		RULE_orgName = 4, RULE_definition = 5, RULE_serviceDefinition = 6, RULE_serviceEndpointAttachments = 7, 
 		RULE_serviceBody = 8, RULE_resourceDefinition = 9, RULE_resourceParameterList = 10, 
-		RULE_callableUnitBody = 11, RULE_compensationActionClause = 12, RULE_functionDefinition = 13, 
+		RULE_callableUnitBody = 11, RULE_onCompensateClause = 12, RULE_functionDefinition = 13, 
 		RULE_lambdaFunction = 14, RULE_arrowFunction = 15, RULE_arrowParam = 16, 
 		RULE_callableUnitSignature = 17, RULE_typeDefinition = 18, RULE_objectBody = 19, 
 		RULE_objectMember = 20, RULE_objectInitializer = 21, RULE_objectInitializerParameterList = 22, 
@@ -150,7 +150,7 @@ public class BallerinaParser extends Parser {
 	public static final String[] ruleNames = {
 		"compilationUnit", "packageName", "version", "importDeclaration", "orgName", 
 		"definition", "serviceDefinition", "serviceEndpointAttachments", "serviceBody", 
-		"resourceDefinition", "resourceParameterList", "callableUnitBody", "compensationActionClause", 
+		"resourceDefinition", "resourceParameterList", "callableUnitBody", "onCompensateClause", 
 		"functionDefinition", "lambdaFunction", "arrowFunction", "arrowParam", 
 		"callableUnitSignature", "typeDefinition", "objectBody", "objectMember", 
 		"objectInitializer", "objectInitializerParameterList", "objectFieldDefinition", 
@@ -1324,8 +1324,8 @@ public class BallerinaParser extends Parser {
 		public StatementContext statement(int i) {
 			return getRuleContext(StatementContext.class,i);
 		}
-		public CompensationActionClauseContext compensationActionClause() {
-			return getRuleContext(CompensationActionClauseContext.class,0);
+		public OnCompensateClauseContext onCompensateClause() {
+			return getRuleContext(OnCompensateClauseContext.class,0);
 		}
 		public List<WorkerDeclarationContext> workerDeclaration() {
 			return getRuleContexts(WorkerDeclarationContext.class);
@@ -1459,7 +1459,7 @@ public class BallerinaParser extends Parser {
 				if (_la==ONCOMPENSATE) {
 					{
 					setState(602);
-					compensationActionClause();
+					onCompensateClause();
 					}
 				}
 
@@ -1501,7 +1501,7 @@ public class BallerinaParser extends Parser {
 		return _localctx;
 	}
 
-	public static class CompensationActionClauseContext extends ParserRuleContext {
+	public static class OnCompensateClauseContext extends ParserRuleContext {
 		public TerminalNode ONCOMPENSATE() { return getToken(BallerinaParser.ONCOMPENSATE, 0); }
 		public TerminalNode LEFT_BRACE() { return getToken(BallerinaParser.LEFT_BRACE, 0); }
 		public TerminalNode RIGHT_BRACE() { return getToken(BallerinaParser.RIGHT_BRACE, 0); }
@@ -1511,23 +1511,23 @@ public class BallerinaParser extends Parser {
 		public StatementContext statement(int i) {
 			return getRuleContext(StatementContext.class,i);
 		}
-		public CompensationActionClauseContext(ParserRuleContext parent, int invokingState) {
+		public OnCompensateClauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_compensationActionClause; }
+		@Override public int getRuleIndex() { return RULE_onCompensateClause; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BallerinaParserListener ) ((BallerinaParserListener)listener).enterCompensationActionClause(this);
+			if ( listener instanceof BallerinaParserListener ) ((BallerinaParserListener)listener).enterOnCompensateClause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BallerinaParserListener ) ((BallerinaParserListener)listener).exitCompensationActionClause(this);
+			if ( listener instanceof BallerinaParserListener ) ((BallerinaParserListener)listener).exitOnCompensateClause(this);
 		}
 	}
 
-	public final CompensationActionClauseContext compensationActionClause() throws RecognitionException {
-		CompensationActionClauseContext _localctx = new CompensationActionClauseContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_compensationActionClause);
+	public final OnCompensateClauseContext onCompensateClause() throws RecognitionException {
+		OnCompensateClauseContext _localctx = new OnCompensateClauseContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_onCompensateClause);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

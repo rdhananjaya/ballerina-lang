@@ -1720,7 +1720,9 @@ public class BLangParserListener extends BallerinaParserBaseListener {
             return;
         }
 
-        this.pkgBuilder.endTransactionStmt(getCurrentPos(ctx), getWS(ctx));
+        boolean isCompensatingTransaction = ctx.transactionClause().COMPENSATION() != null;
+
+        this.pkgBuilder.endTransactionStmt(getCurrentPos(ctx), getWS(ctx), isCompensatingTransaction);
     }
 
     /**
@@ -1743,6 +1745,19 @@ public class BLangParserListener extends BallerinaParserBaseListener {
 
         this.pkgBuilder.endTransactionPropertyInitStatementList(getWS(ctx));
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override public void exitCompensationIdStatement(BallerinaParser.CompensationIdStatementContext ctx) {
+        if (ctx.exception != null) {
+            return;
+        }
+
+        String literal = ctx.QuotedStringLiteral().getText();
+        String transId = literal.substring(1, literal.length() - 1);
+        this.pkgBuilder.addTransactionId(getWS(ctx), transId);
     }
 
     /**
@@ -3179,7 +3194,7 @@ public class BLangParserListener extends BallerinaParserBaseListener {
         if (ctx.exception != null) {
             return;
         }
-        this.pkgBuilder.startOnCompensationBlock();
+        this.pkgBuilder.startOnCompensationBlock(diagnosticSrc.pkgID);
     }
 
     @Override
@@ -3188,12 +3203,34 @@ public class BLangParserListener extends BallerinaParserBaseListener {
             return;
         }
 
-        String scope = null;
+        String compensationId = null;
         if (ctx.Identifier() != null) {
-            scope = ctx.Identifier().getText();
+            compensationId = ctx.Identifier().getText();
+        } else if (ctx.QuotedStringLiteral() != null) {
+            String quoted = ctx.QuotedStringLiteral().getText();
+            compensationId = quoted.substring(1, quoted.length() - 1);
         }
 
-        this.pkgBuilder.addCompensateStatement(getCurrentPos(ctx), getWS(ctx), scope);
+        this.pkgBuilder.addCompensateStatement(getCurrentPos(ctx), getWS(ctx), compensationId);
+    }
+
+    @Override
+    public void enterOnCompensateClause(BallerinaParser.OnCompensateClauseContext ctx) {
+        if (ctx.exception != null) {
+            return;
+        }
+        this.pkgBuilder.startOnCompensationBlock(diagnosticSrc.pkgID);
+    }
+
+    @Override
+    public void exitOnCompensateClause(BallerinaParser.OnCompensateClauseContext ctx) {
+        if (ctx.exception != null) {
+            return;
+        }
+
+        List<BallerinaParser.StatementContext> statements = ctx.statement();
+
+        this.pkgBuilder.endOnCompensateBlock(getCurrentPos(ctx), getWS(ctx));
     }
 
     private DiagnosticPos getCurrentPos(ParserRuleContext ctx) {
