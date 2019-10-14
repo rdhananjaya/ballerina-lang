@@ -1130,7 +1130,7 @@ public class TaintAnalyzer extends BLangNodeVisitor {
 
         int requiredParamCount = invocationExpr.requiredArgs.size();
         int restCount = invocationExpr.restArgs == null || invocationExpr.restArgs.isEmpty() ? 0 : 1;
-        int totalParamCount = requiredParamCount + restCount;
+        int totalParamCount = requiredParamCount + restCount + receiverIfAttachedFunction(invocationExpr);
 
         for (int i = ALL_UNTAINTED_TABLE_ENTRY_INDEX; i < totalParamCount; i++) {
             TaintRecord record = new TaintRecord(
@@ -1146,33 +1146,8 @@ public class TaintAnalyzer extends BLangNodeVisitor {
         return taintTable;
     }
 
-    private void analyzeBuiltInMethodInvocation(BLangInvocation invocationExpr) {
-        BLangBuiltInMethod builtInMethod = invocationExpr.builtInMethod;
-        switch (builtInMethod) {
-            case IS_NAN:
-            case IS_INFINITE:
-            case IS_FINITE:
-            case LENGTH:
-            case IS_FROZEN:
-                getCurrentAnalysisState().taintedStatus = TaintedStatus.UNTAINTED;
-                break;
-            case FREEZE:
-            case CLONE:
-                invocationExpr.expr.accept(this);
-                break;
-            case STAMP:
-            case CONVERT:
-            case CALL:
-                invocationExpr.argExprs.forEach(expression -> expression.accept(this));
-                break;
-            case REASON:
-            case DETAIL:
-            case STACKTRACE:
-                invocationExpr.expr.accept(this);
-                break;
-            default:
-                throw new AssertionError("Taint checking failed for built-in method: " + builtInMethod);
-        }
+    private int receiverIfAttachedFunction(BLangInvocation invocationExpr) {
+        return isTaintAnalyzableAttachedFunction(invocationExpr) ? 1 : 0;
     }
 
     @Override
