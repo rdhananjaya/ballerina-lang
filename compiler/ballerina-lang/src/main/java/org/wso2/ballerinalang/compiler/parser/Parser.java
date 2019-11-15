@@ -58,6 +58,7 @@ public class Parser {
 
     private static final CompilerContext.Key<Parser> PARSER_KEY = new CompilerContext.Key<>();
     private final boolean preserveWhitespace;
+    private final LexCache tokenCache;
 
     private CompilerContext context;
     private BLangDiagnosticLog dlog;
@@ -80,6 +81,7 @@ public class Parser {
         this.preserveWhitespace = Boolean.parseBoolean(options.get(CompilerOptionName.PRESERVE_WHITESPACE));
         this.dlog = BLangDiagnosticLog.getInstance(context);
         this.pkgCache = PackageCache.getInstance(context);
+        this.tokenCache = LexCache.getInstance(context);
     }
 
     public BLangPackage parse(PackageSource pkgSource, Path sourceRootPath) {
@@ -116,17 +118,15 @@ public class Parser {
             compUnit.setName(sourceEntry.getEntryName());
             compUnit.pos = new DiagnosticPos(diagnosticSrc, 1, 1, 1, 1);
 
-            ANTLRInputStream ais = new ANTLRInputStream(new InputStreamReader(new ByteArrayInputStream(sourceEntry
-                    .getCode()), StandardCharsets.UTF_8));
-            ais.name = entryName;
-            BallerinaLexer lexer = new BallerinaLexer(ais);
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(new BallerinaParserErrorListener(context, diagnosticSrc));
-            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+            byte[] code = sourceEntry.getCode();
+            CommonTokenStream tokenStream = tokenCache.getTokenStream(code, entryName, diagnosticSrc);
+
             BallerinaParser parser = new BallerinaParser(tokenStream);
             parser.setErrorHandler(getErrorStrategy(diagnosticSrc));
             parser.addParseListener(newListener(tokenStream, compUnit, diagnosticSrc));
             parser.compilationUnit();
+
+            tokenCache.addToCache(code, tokenStream.getTokens());
             return compUnit;
         } catch (IOException e) {
             throw new RuntimeException("error reading module: " + e.getMessage(), e);
