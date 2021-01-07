@@ -1330,8 +1330,7 @@ public class Types {
         int rhsAttachedFuncCount = getObjectFuncCount(rhsStructSymbol);
 
         // If LHS is a service obj, then RHS must be a service object in order to assignable
-        boolean isLhsAService = Symbols.isService(lhsStructSymbol);
-        if (isLhsAService && !Symbols.isService(rhsStructSymbol)) {
+        if (Symbols.isService(lhsStructSymbol) && !Symbols.isService(rhsStructSymbol)) {
             return false;
         }
 
@@ -1368,7 +1367,7 @@ public class Types {
             }
 
             // Service resource methods are not considered as part of service objects type.
-            if (isLhsAService && Symbols.isResource(lhsFunc.symbol)) {
+            if (Symbols.isResource(lhsFunc.symbol)) {
                 continue;
             }
 
@@ -3738,10 +3737,7 @@ public class Types {
                 return false;
             }
 
-            if (!types.isAssignable(func.type.retType, symtable.errorOrNilType)) {
-                return false;
-            }
-            return true;
+            return types.isAssignable(func.type.retType, symtable.errorOrNilType);
         }
 
         private boolean isPublicNoParamReturnsErrorOrNil(BAttachedFunction func) {
@@ -3749,11 +3745,7 @@ public class Types {
                 return false;
             }
 
-            if (!emptyParamList(func)) {
-                return false;
-            }
-
-            return true;
+            return emptyParamList(func);
         }
 
         private boolean checkImmediateStop(BAttachedFunction func) {
@@ -3777,10 +3769,7 @@ public class Types {
                 return false;
             }
 
-            BType firstParamType = func.type.paramTypes.get(0);
-            boolean isMatchingSignature = firstParamType.tag == TypeTags.OBJECT
-                    && Symbols.isService(firstParamType.tsymbol);
-            return detachFound = isMatchingSignature;
+            return detachFound = isServiceObject(func.type.paramTypes.get(0));
         }
 
         private boolean checkAttachMethod(BAttachedFunction func) {
@@ -3792,7 +3781,6 @@ public class Types {
                 return false;
             }
 
-            // todo: change is unions are allowed as service type.
             BType firstParamType = func.type.paramTypes.get(0);
             if (firstParamType.tag != TypeTags.OBJECT) {
                 return false;
